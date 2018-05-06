@@ -3,3 +3,4 @@ def defined_features():
 
 def feature_engineering(frame):
     frame['PreSchool'] = frame.apply(lambda p: p['Age'] <= 6, axis=1)
+    frame['Senior'] = frame.apply(lambda p: p['Age'] >= 65, axis=1)

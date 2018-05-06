@@ -20,7 +20,9 @@ maleFirstClass = all[(all['Sex'] == 'male') & (all['Pclass'] == 1)]
 maleSecondClass = all[(all['Sex'] == 'male') & (all['Pclass'] == 2)]
 maleThirdClass = all[(all['Sex'] == 'male') & (all['Pclass'] == 3)]
 preschool = all[all['PreSchool'] == True]
+senior = all[all['Senior'] == True]
 print('PreSchool', preschool.shape[0], calculate_ratio_dataset(preschool))
+print('Senior', senior.shape[0], calculate_ratio_dataset(senior))
 print('F3', femaleThirdClass.shape[0], calculate_ratio_dataset(femaleThirdClass))
 print('F2', femaleSecondClass.shape[0], calculate_ratio_dataset(femaleSecondClass))
 print('F1', femaleFirstClass.shape[0], calculate_ratio_dataset(femaleFirstClass))
