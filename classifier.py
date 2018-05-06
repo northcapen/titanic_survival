@@ -2,14 +2,12 @@ def build_classifier(frame):
     all = frame
     survived = frame[frame['Survived'] == 1]
     died = frame[frame['Survived'] == 0]
+    survival_ratio = survived.shape[0] / died.shape[0]
 
     def count_ratio(field_name, field_value):
         survived_count = survived[survived[field_name] == field_value].shape[0]
         all_count = all[all[field_name] == field_value].shape[0]
         ratio = survived_count / all_count
-
-        # print('Survival ratio for ' + field_name + " == " + str(field_value) + " is " + str(ratio))
-
         return ratio
 
     ratios = {}
@@ -27,6 +25,10 @@ def build_classifier(frame):
 
     # print(femaleThirdClass[femaleThirdClass['Survived'] == 1].shape[0])
 
+
+    def ratio(passenger, field_name):
+        return ratios[field_name][passenger[field_name]]
+
     def naive_predict_survival(df):
         if df['Pclass'] == 1:
             return 1
@@ -37,7 +39,13 @@ def build_classifier(frame):
         return 1 if result else 0
 
     def gender_and_class_survival(passenger):
-        result = ratios['Pclass'][passenger['Pclass']] * ratios['Sex'][passenger['Sex']] > 0.5 * 0.5
+        result = ratio(passenger, 'Pclass') * ratio(passenger, 'Sex') > 0.5 * 0.5
         return 1 if result else 0
 
-    return gender_and_class_survival
+    def gender_and_class_survival_bayes(passenger):
+        survive = survival_ratio * ratio(passenger, 'Pclass') * ratio(passenger, 'Sex')
+        die = (1 - survival_ratio) * (1 - ratio(passenger, 'Pclass')) * (1 - ratio(passenger, 'Sex'))
+        return 1 if survive >= die else 0
+
+
+    return gender_and_class_survival_bayes
