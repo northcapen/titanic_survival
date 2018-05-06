@@ -9,6 +9,7 @@ def build_classifier(frame):
     died = frame[frame['Survived'] == 0]
     survival_ratio = survived.shape[0] / died.shape[0]
 
+
     def count_ratio(field_name, field_value):
         survived_count = survived[survived[field_name] == field_value].shape[0]
         all_count = all[all[field_name] == field_value].shape[0]
@@ -24,12 +25,6 @@ def build_classifier(frame):
     ratios = {}
     for feature in features:
         train_feature(feature, features[feature])
-
-    print(ratios)
-    #femaleThirdClass = all[(all['Sex'] == 'female') & (all['Pclass'] == 3)]
-    # print(femaleThirdClass.shape[0])
-    #print("{0:.3f}".format(femaleThirdClass[femaleThirdClass['Survived'] == 0].shape[0]))
-    # print(femaleThirdClass[femaleThirdClass['Survived'] == 1].shape[0])
 
 
     def ratio(passenger, field_name):
