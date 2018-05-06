@@ -1,9 +1,10 @@
 import functools
+from feature_eng import defined_features
 
 def build_classifier(frame):
     all = frame
 
-    features = {'Pclass': [1, 2, 3], 'Sex': ['male', 'female'], 'PreSchool': [True, False]}
+    features = defined_features()
 
     survived = frame[frame['Survived'] == 1]
     died = frame[frame['Survived'] == 0]
