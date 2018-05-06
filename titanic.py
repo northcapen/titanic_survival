@@ -1,12 +1,9 @@
 import pandas as pd
 
 from classifier import build_classifier
-
-def feature_engineering(frame):
-    frame['PreSchool'] = frame.apply(lambda p: p['Age'] <= 6, axis=1)
+from feature_eng import feature_engineering
 
 frame = pd.read_csv('train.csv', delimiter=',')
-
 
 feature_engineering(frame)
 predict_survival = build_classifier(frame)
