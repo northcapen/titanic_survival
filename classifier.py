@@ -53,4 +53,13 @@ def build_classifier(frame):
         die = (1 - survival_ratio) * die_feature_factor
         return 1 if survive >= die else 0
 
-    return gender_and_class_survival_bayes
+    def decision_tree(passenger):
+        if passenger['Sex'] == 'male':
+            return 0
+
+        if passenger['Pclass'] == 3 and passenger['Embarked'] == 'S':
+            return 0
+
+        return 1
+
+    return decision_tree
