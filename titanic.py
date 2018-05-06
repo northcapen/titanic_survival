@@ -14,3 +14,8 @@ print(predict_survival({'Sex' : 'female', 'Pclass': 3}))
 
 frame['Predicted'] = frame.apply(predict_survival, axis=1)
 print("Accuracy: %.3f" %(frame[frame['Predicted'] == frame['Survived']].shape[0] / frame.shape[0]))
+
+test_set = pd.read_csv('test.csv', delimiter=',')
+test_set['Survived'] = test_set.apply(predict_survival, axis=1)
+
+test_set.to_csv(path_or_buf='test_submission.csv', columns=['PassengerId', 'Survived'], index=False)
