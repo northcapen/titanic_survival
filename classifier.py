@@ -27,6 +27,7 @@ def build_classifier(frame):
     for feature in features:
         train_feature(feature, features[feature])
 
+    print(ratios)
 
     def ratio(passenger, field_name):
         return ratios[field_name][passenger[field_name]]
