@@ -20,7 +20,7 @@ def build_classifier(frame):
     ratios['Sex'] = {}
     ratios['Sex']['male'] = count_ratio('Sex', 'male')
     ratios['Sex']['female'] = count_ratio('Sex', 'female')
-    # print(ratios)
+    print(ratios)
     femaleThirdClass = all[(all['Sex'] == 'female') & (all['Pclass'] == 3)]
     # print(femaleThirdClass.shape[0])
     print("{0:.3f}".format(femaleThirdClass[femaleThirdClass['Survived'] == 0].shape[0]))
@@ -32,10 +32,12 @@ def build_classifier(frame):
             return 1
         return 0
 
-    def predict_survival(passenger):
-        # result = ratios['Pclass'][passenger['Pclass']] * ratios['Sex'][passenger['Sex']] > 0.5 * 0.5
+    def gender_only_survival(passenger):
         result = ratios['Sex'][passenger['Sex']] > 0.5
-        # print(passenger['Pclass'], passenger['Sex'], " is ", 1 if result else 0, "In fact is ", passenger['Survived'])
         return 1 if result else 0
 
-    return predict_survival
+    def gender_and_class_survival(passenger):
+        result = ratios['Pclass'][passenger['Pclass']] * ratios['Sex'][passenger['Sex']] > 0.5 * 0.5
+        return 1 if result else 0
+
+    return gender_and_class_survival
