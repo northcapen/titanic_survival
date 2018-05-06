@@ -1,5 +1,6 @@
 def build_classifier(frame):
     all = frame
+
     survived = frame[frame['Survived'] == 1]
     died = frame[frame['Survived'] == 0]
     survival_ratio = survived.shape[0] / died.shape[0]
@@ -10,19 +11,21 @@ def build_classifier(frame):
         ratio = survived_count / all_count
         return ratio
 
-    ratios = {}
-    ratios['Pclass'] = {}
-    ratios['Pclass'][1] = count_ratio('Pclass', 1)
-    ratios['Pclass'][2] = count_ratio('Pclass', 2)
-    ratios['Pclass'][3] = count_ratio('Pclass', 3)
-    ratios['Sex'] = {}
-    ratios['Sex']['male'] = count_ratio('Sex', 'male')
-    ratios['Sex']['female'] = count_ratio('Sex', 'female')
-    print(ratios)
-    femaleThirdClass = all[(all['Sex'] == 'female') & (all['Pclass'] == 3)]
-    # print(femaleThirdClass.shape[0])
-    print("{0:.3f}".format(femaleThirdClass[femaleThirdClass['Survived'] == 0].shape[0]))
+    def train_feature(feature, values):
+        ratios[feature] = {}
+        for v in values:
+            ratios[feature][v] = count_ratio(feature, v)
 
+
+    ratios = {}
+    train_feature('Pclass', [1, 2, 3])
+    train_feature('Sex', ['male', 'female'])
+    train_feature('PreSchool', [True, False])
+
+    print(ratios)
+    #femaleThirdClass = all[(all['Sex'] == 'female') & (all['Pclass'] == 3)]
+    # print(femaleThirdClass.shape[0])
+    #print("{0:.3f}".format(femaleThirdClass[femaleThirdClass['Survived'] == 0].shape[0]))
     # print(femaleThirdClass[femaleThirdClass['Survived'] == 1].shape[0])
 
 
@@ -43,9 +46,8 @@ def build_classifier(frame):
         return 1 if result else 0
 
     def gender_and_class_survival_bayes(passenger):
-        survive = survival_ratio * ratio(passenger, 'Pclass') * ratio(passenger, 'Sex')
-        die = (1 - survival_ratio) * (1 - ratio(passenger, 'Pclass')) * (1 - ratio(passenger, 'Sex'))
+        survive = survival_ratio * ratio(passenger, 'Pclass') * ratio(passenger, 'Sex') * ratio(passenger, 'PreSchool')
+        die = (1 - survival_ratio) * (1 - ratio(passenger, 'Pclass')) * (1 - ratio(passenger, 'Sex')) * (1 - ratio(passenger, 'PreSchool'))
         return 1 if survive >= die else 0
-
 
     return gender_and_class_survival_bayes
