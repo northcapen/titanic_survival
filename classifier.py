@@ -1,5 +1,9 @@
+import functools
+
 def build_classifier(frame):
     all = frame
+
+    features = {'Pclass': [1, 2, 3], 'Sex': ['male', 'female'], 'PreSchool': [True, False]}
 
     survived = frame[frame['Survived'] == 1]
     died = frame[frame['Survived'] == 0]
@@ -18,9 +22,8 @@ def build_classifier(frame):
 
 
     ratios = {}
-    train_feature('Pclass', [1, 2, 3])
-    train_feature('Sex', ['male', 'female'])
-    train_feature('PreSchool', [True, False])
+    for feature in features:
+        train_feature(feature, features[feature])
 
     print(ratios)
     #femaleThirdClass = all[(all['Sex'] == 'female') & (all['Pclass'] == 3)]
@@ -46,8 +49,11 @@ def build_classifier(frame):
         return 1 if result else 0
 
     def gender_and_class_survival_bayes(passenger):
-        survive = survival_ratio * ratio(passenger, 'Pclass') * ratio(passenger, 'Sex') * ratio(passenger, 'PreSchool')
-        die = (1 - survival_ratio) * (1 - ratio(passenger, 'Pclass')) * (1 - ratio(passenger, 'Sex')) * (1 - ratio(passenger, 'PreSchool'))
+        survival_features_factor = functools.reduce(lambda acc, feature: acc * ratio(passenger, feature), features, 1)
+        die_feature_factor = functools.reduce(lambda acc, feature: acc * (1 - ratio(passenger, feature)), features, 1)
+
+        survive = survival_ratio * survival_features_factor
+        die = (1 - survival_ratio) * die_feature_factor
         return 1 if survive >= die else 0
 
     return gender_and_class_survival_bayes
